@@ -6,6 +6,7 @@ import type { RepoCheck } from "./types.js";
 interface PackageJson {
   name?: unknown;
   version?: unknown;
+  license?: unknown;
   scripts?: unknown;
 }
 
@@ -32,7 +33,8 @@ export const checkPackageJson: RepoCheck = async ({ root }) => {
 
   const missing = [
     typeof packageJson.name === "string" && packageJson.name.length > 0 ? undefined : "name",
-    typeof packageJson.version === "string" && packageJson.version.length > 0 ? undefined : "version"
+    typeof packageJson.version === "string" && packageJson.version.length > 0 ? undefined : "version",
+    typeof packageJson.license === "string" && packageJson.license.length > 0 ? undefined : "license"
   ].filter((value): value is string => Boolean(value));
 
   if (missing.length > 0) {
