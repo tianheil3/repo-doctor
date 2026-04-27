@@ -24,6 +24,7 @@ test("reports a healthy repository as passing", async () => {
     "package.json": JSON.stringify({
       name: "example",
       version: "1.0.0",
+      license: "MIT",
       scripts: { test: "node --test", lint: "tsc --noEmit" }
     })
   });
@@ -35,6 +36,24 @@ test("reports a healthy repository as passing", async () => {
     result.checks.map((check) => check.status),
     ["pass", "pass", "pass", "pass"]
   );
+});
+
+test("reports missing package license metadata", async () => {
+  const root = await makeRepo({
+    "README.md": "# Example\n",
+    "package.json": JSON.stringify({
+      name: "example",
+      version: "1.0.0",
+      scripts: { test: "node --test", lint: "tsc --noEmit" }
+    })
+  });
+
+  const result = await runDoctor({ root });
+  const packageCheck = result.checks.find((check) => check.id === "package-json");
+
+  assert.equal(result.ok, false);
+  assert.equal(packageCheck?.status, "fail");
+  assert.match(packageCheck?.message ?? "", /license/);
 });
 
 test("reports missing README, incomplete package metadata, and missing scripts", async () => {
@@ -62,6 +81,7 @@ test("reports broken relative markdown links", async () => {
     "package.json": JSON.stringify({
       name: "example",
       version: "1.0.0",
+      license: "MIT",
       scripts: { test: "node --test", lint: "tsc --noEmit" }
     })
   });
