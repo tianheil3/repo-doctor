@@ -1,0 +1,23 @@
+{
+  "name": "repo-doctor",
+  "version": "0.1.0",
+  "description": "A small TypeScript CLI target project for exercising Symphony issue-driven automation.",
+  "type": "module",
+  "bin": {
+    "repo-doctor": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "check": "npm run lint && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
